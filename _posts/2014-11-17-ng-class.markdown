@@ -10,4 +10,4 @@ This took me some finagaling to get working properly so I thought I would post i
 <i class="fa" ng-class="issue.data.user.login === comment.user.login ? 'fa-user' : 'fa-comment' "></i>
 {% endhighlight %}
 
-It's important to note you don't have to put all of your classes in ng-class.  If your element has multiple classes you can stick the other ones inside of the normal clss tag.
+It's important to note you don't have to put all of your classes in ng-class.  If your element has multiple classes you can stick the other ones inside of the normal class tag.  Here I check it against another variable, but you could just as easily compare it to a string and do the same thing.
