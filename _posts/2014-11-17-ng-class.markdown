@@ -1,0 +1,13 @@
+---
+layout: post
+title:  "ng-class with a ternary operator"
+date:   2014-11-17 17:48:18
+categories: angular js
+---
+This took me some finagaling to get working properly so I thought I would post it in case anyone else was having issues with the syntax.  By default `ng-class` checks for truthy values, but you can use a ternary operator if you want like this:
+
+{% highlight html %}
+<i class="fa" ng-class="issue.data.user.login === comment.user.login ? 'fa-user' : 'fa-comment' "></i>
+{% endhighlight %}
+
+It's important to note you don't have to put all of your classes in ng-class.  If your element has multiple classes you can stick the other ones inside of the normal clss tag.
