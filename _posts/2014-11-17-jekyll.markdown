@@ -22,7 +22,7 @@ angular.filter('userLinker', function($sce) {
 });
 {% endhighlight %}
 
-You then use the filter with the following code where your.data is what ever you want to pass in from your controller.
+You then use the filter with the following code where `your.data` is what ever you want to pass in from your controller.
 
 {% highlight html %}
 <div class="panel-body" ng-bind-html="your.data | userLinker"> </div>
