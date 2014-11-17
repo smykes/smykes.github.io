@@ -10,15 +10,20 @@ This filter will replace a GitHub user name in the syle of @smykes into a link i
 <a href="https://github.com/smykes">@smykes</a>
 {% endhighlight %}
 
-into [@smykes](https://github.com/smykes)
+into [@smykes](https://github.com/smykes).  It will also render the text passed in as HTML in your view instead of just text.  
 
 {% highlight js %}
 angular.filter('userLinker', function($sce) {
     return function(item) {
         console.log(item);
         item = item.replace(/((@)(\w{1,50}))/g, '<a href="https://github.com/smykes">@smykes</a>');
-        return item;
+        return $sce.trustAsHtml(item);
     };
 });
 {% endhighlight %}
 
+You then use the filter with the following code where your.data is what ever you want to pass in from your controller.
+
+{% highlight html %}
+<div class="panel-body" ng-bind-html="your.data | userLinker"> </div>
+{% endhighlight %}
