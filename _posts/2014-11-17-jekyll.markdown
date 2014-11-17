@@ -1,12 +1,22 @@
 ---
 layout: post
-title:  "Angular Setup"
+title:  "Angular filter to replace GitHub user names."
 date:   2014-11-17 15:12:18
 categories: angular js
 ---
+This filter will replace a GitHub user name in the syle of @smykes into a link in the following format:
 
+{% highlight html %}
+<a href="https://github.com/smykes">@smykes</a>
+{% endhighlight %}
 
 {% highlight js %}
-console.log("test");
+angular.filter('userLinker', function($sce) {
+    return function(item) {
+        console.log(item);
+        item = item.replace(/((@)(\w{1,50}))/g, '<a href="https://github.com/smykes">@smykes</a>');
+        return item;
+    };
+});
 {% endhighlight %}
 
