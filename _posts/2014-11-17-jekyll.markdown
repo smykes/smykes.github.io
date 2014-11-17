@@ -10,6 +10,8 @@ This filter will replace a GitHub user name in the syle of @smykes into a link i
 <a href="https://github.com/smykes">@smykes</a>
 {% endhighlight %}
 
+into [https://github.com/smykes](@smykes)
+
 {% highlight js %}
 angular.filter('userLinker', function($sce) {
     return function(item) {
