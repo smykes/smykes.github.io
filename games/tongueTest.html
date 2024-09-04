@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      canvas {
+        border: 1px solid #9C9898;
+      }
+    </style>
+    <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.0.js"></script>
+    <script>
+      window.onload = function() {
+        var stage = new Kinetic.Stage({
+          container: "container",
+          width: 800,
+          height: 600
+        });
+        var layer = new Kinetic.Layer();
+        var imageObj = new Image();
+		imageObj.src = 'assets/images/spider.png';
+		imageObj.onload = function() {
+		var spider = new Kinetic.Image({
+			x: 470,
+			y: 500,
+			image: imageObj,
+			width: 84,
+			height: 72
+		});
+		layer.add(spider);
+		stage.add(layer);
+		var period = 2000;
+		var amplitude= 10;
+		var height = 400;
+		glob.spider.transitionTo({
+			y:100,
+			duration: 60,
+			callback: test
+		});
+		 function test() {
+			 glob.spider.transitionTo({
+				 y:500,
+				 duration: 3
+			 })
+		 }
+
+      };
+}
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>

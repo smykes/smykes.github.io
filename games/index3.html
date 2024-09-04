@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <script type="text/javascript" src="scripts/kinetic-min.js"></script>
+  <script type="text/javascript" src="scripts/jquery.min.js"></script>
+
+  <title>My Crafty Game</title>
+  <style>
+    body, html { margin:0; padding: 0; overflow:hidden; font-family:Arial; font-size:20px }
+    #cr-stage { border:2px solid black; margin:5px auto; color:white }
+  </style>
+  <script type="text/javascript">
+  	//Monkey Global
+  	var monkey;
+  	//Banana Global
+  	var banana;
+  	var timeoutId;
+  	var ebLocationArray;
+  	var collected = 0;
+
+  	$("body").ready(function() {
+  		var source = ["assets/images/monkey.png", "assets/images/bannana.png"];
+	  	function preload(source) {
+	  		jQuery.each(sources, function(i,source) { jQuery.get(source); });
+	  	}
+  		//Navigation code
+  		$(document).keydown(function(e) {
+  			//go();
+  			var code = (e.keyCode ? e.keyCode : e.which);
+  			//IF 'W' IS PRESSED GO UP 
+  			if (code == 87) {
+  				//CURRENT POSITION OF MONKEY BEFORE MOVING
+  				var y = (monkey.attrs.y);
+  				//IF THE MONKEY IS ON THE UPPER LIMITS OF THE BOARD DON'T MOVE HIM
+  				if (y == 0) {return;}
+  				else {
+  					/*--CALCUALTE THE NEW 'Y' POSITION OF THE MONKEY ('X' STAYS THE 
+  					SAME WHEN MOVING VERTICALLY.)  32 PIXELS TO THE NEXT SQUARE--*/
+  					var y = (monkey.attrs.y) - 32;
+  					//MOVE THE MONEY TO THE NEW POSITION BY SETTING THE 'Y' POSITION
+	  				monkey.setY(y);
+	  				//RE-DRAW THE GAME BOARD
+	  				stage.draw();
+  				}
+  			}
+  			//left
+  			else if (code == 65) {
+	  			var x = (monkey.attrs.x);
+  				if ( x == 0) {return;}
+  				else {
+	  				var x = (monkey.attrs.x) - 64;
+	  				monkey.setX(x);
+	  				stage.draw();
+  				}
+  			}
+  			//down
+  			else if (code == 83) {
+  				var y = (monkey.attrs.y);
+  				if (y == 480) {return;}
+  				else {
+	  				var y = (monkey.attrs.y) + 32;
+	  				monkey.setY(y);
+	  				stage.draw();
+  				}
+  			}
+  			//right
+  			else if (code == 68) {
+  				var x = (monkey.attrs.x);
+  				if (x == 576) {return;}
+  				else {
+	  				var x = (monkey.attrs.x) + 64;
+	  				monkey.setX(x);
+	  				stage.draw();	
+  				}
+  			}
+  			///THE NEW 'X' AND 'Y' OF THE MONKEY AFTER THE MOVE
+  			var newX = monkey.attrs.x;
+  			var newY = monkey.attrs.y;
+  			/*-IF THE NEW LOCATION OF THE MONKEY IS EQUAL TO THAT OF 
+  			GOOD BANNANA REMOVE THE OLD BANANA AND DRAW A NEW GOOD BANANA-*/
+  			/*-TODO: RESET THE CLOCK -  - DRAW NEW EVIL BANNANAS--*/
+  			var newMonkeyPosition = newX/64 + "/" + newY/32; 
+  			//IF MONKEY COLIDES WITH GOOD BANANA
+  			if ((newX == banana.attrs.x) && (newY == banana.attrs.y)) {
+  				clearTimeout(timeoutId);
+	  			bananasLayer.removeChildren();
+	  			monkey.setX(0);
+	  			monkey.setY(0);
+	  			drawBananas();
+	  			drawEvilBananas();
+	  			collected++;
+  			}
+  			
+  			//IF MONKEY COLIDES WITH BAD BANANA
+  			if ($.inArray(newMonkeyPosition, ebLocationArray) != -1) {
+	  			stage.removeChildren();
+	  			var textLayer = new Kinetic.Layer();
+	  			var simpleText = new Kinetic.Text({
+		          x: 190,
+		          y: 15,
+		          text: "Game Over\n" + collected + " Collected!",
+		          fontSize: 30,
+		          fontFamily: "Sans-serif",
+		          textFill: "green"
+		        });
+		        textLayer.add(simpleText);
+		        stage.add(textLayer);
+		        stage.draw();
+  			}
+  		});
+  		//Define the stage
+	  	var stage = new Kinetic.Stage({
+          container: "container",
+          width: 640,
+          height: 512,
+        });
+        //Define the playing surface
+        var gameBoard = new Kinetic.Layer();
+        //The layer the banaas go on 
+        var bananasLayer = new Kinetic.Layer();
+        //The layer where the timer goes
+        var timerLayer = new Kinetic.Layer();
+        //Define the monkey 
+        //define the image for the monkey
+      
+        var imageObj = new Image();  
+        //when the monkey image is done loading
+        imageObj.onload = function() {         
+        //define the monkey
+			monkey = new Kinetic.Image({
+				x: 0,
+				y: 0,
+				image: imageObj,
+				width: 63,
+				height: 32
+			});
+       //Define the timer
+	        var timer = new Kinetic.Rect({
+				width: 50, 
+				height: 40,
+				x: 580,
+				y: 460,
+				alpha: .5,
+				fill: "red",
+				strokeWidth: 1,
+				id : "timer"
+			});
+		
+		//add the timer to the timerlayer
+		timerLayer.add(timer);
+		//add monkey to the playing surface
+		gameBoard.add(monkey);
+		//draw the actual playing surface
+        drawBoard();
+        //draws the correct note
+        drawBananas();
+        //draws the wrong notes
+        drawEvilBananas();
+        //add playing surface to the canvas
+        stage.add(gameBoard);
+        //add the bananas to the canvas
+        stage.add(bananasLayer);
+        //add the timer to the canvas
+        stage.add(timerLayer);
+        //draw the timer
+        function drawTimer() {
+        	//define the timer
+        	timerLayer.remove(timer);
+        	timerLayer.draw();
+	        var timer = new Kinetic.Rect({
+		       	width: 120, 
+		       	height: 40,
+		       	x: 480,
+		       	y: 460,
+		       	alpha: .5,
+		       	fill: "red",
+		       	strokeWidth: 1
+	        });
+	        //add the timer to the timer layer
+        }
+        
+        var newTime = 0;
+		var startTime = Date.now();
+		var endTime = Date.now() + 10000;
+		
+		//set the timer in motion
+		function go() {	
+			timeoutId = setInterval(
+				function() {
+					startTimer();
+					}, 1000);
+		}
+
+	  	function startTimer() {
+	  		newTime++;
+	  		if ( ((newTime * 1000) + startTime == endTime) || ((newTime * 1000) + startTime > endTime) ) {
+		  		timer.setWidth(0);
+		  		stage.draw();
+		  		clearTimeout(timeoutId);
+	  		}
+	  		else {
+	  			timer.setWidth((((endTime - startTime) - (newTime *1000))/1000)*10);
+	  			stage.draw();
+	  		}
+	   	} 
+
+        
+
+        function drawBoard() {        
+	        for (var w = 0; w < 10; w++) {
+		        for (var h = 0; h < 16; h++) {
+			       var board =	new Kinetic.Rect({
+			        	x: w * 64,
+			        	y: h * 32,
+			        	width: 63,
+			        	height: 32,
+			        	id: "square" + w + h
+			        });
+			        gameBoard.add(board);
+			        stage.draw();
+		        }
+	        }
+        }
+        
+        function drawBananas() {
+        	var mp = monkeyGridPosition();
+	        var xoffset = (Math.floor(Math.random()*10)); 
+	      	var yoffset = (Math.floor(Math.random()*16));
+	      	var op = xoffset + "/" + yoffset;
+	      	if (mp == op) {
+		      	drawBananas();
+	      	}
+	      	else {
+	      		banana = new Kinetic.Rect({
+			     	width: 63,
+				    height: 32,
+				    fill: "yellow",
+			     	strokeWidth: 1,
+			     	x: 64 * xoffset,
+			     	y: 32* yoffset
+		     	});  
+	      }
+	      bananasLayer.add(banana);
+        };
+        
+        function drawEvilBananas() {
+          var bp = bananaGridPosition();
+	      var mp = monkeyGridPosition();
+	      var bpArray = bp.split("/");
+	      var bp_y = bpArray[1];
+	      var bp_x = bpArray[0];
+	      var yLocationArray = [];
+	      var xLocationArray = [];
+	      ebLocationArray = [];
+	      for (var i = 0; i < 10; i++) {
+	      	//dont put an evil banana in a good banana row
+		      if (bp_x == i) {
+			      continue;
+		      }
+		      
+		     else  {
+			 	var yoffset = (Math.floor(Math.random()*16));
+			 	//never shows up in 0/0
+			 	if ((i == 0) && (yoffset == 0))
+			 	{
+				 	yoffset = 1;
+			 	}
+			 	
+			 	if ((i == 1) && (yLocationArray[0] == 1) && (yoffset == 1)) {
+				 	yoffset = 2;
+			 	}
+			 	yLocationArray.push(yoffset);
+			 	ebLocationArray.push(i + "/" + yoffset);
+			 	evilbanana = new Kinetic.Rect({
+			     	width: 63,
+				    height: 32,
+				    fill: "orange",
+			     	strokeWidth: 1,
+			     	x: 64 * i,
+			     	y: 32* yoffset
+		     	});  
+		     	bananasLayer.add(evilbanana);
+		     }
+	      }
+        };
+     
+        //find the coordinates of the monkey
+        function monkeyGridPosition() {
+	        var xg = monkey.attrs.x/64;
+	        var yg = monkey.attrs.y/32;
+	        var ga = xg + "/" + yg;
+	        return ga;
+        }
+        
+        function bananaGridPosition() {
+	        var xg = banana.attrs.x/64;
+	        var yg = banana.attrs.y/32;
+	        var ga = xg + "/" + yg;
+	        return ga;
+        }
+
+        };
+        imageObj.src = "assets/images/monkey.png";
+      	
+
+        
+        
+        
+         
+	});
+  </script>
+</head>
+<body>
+	<div id="container" style="width: 640px; height: 512px; border: 1px solid black;"></div>
+</body>
+</html>

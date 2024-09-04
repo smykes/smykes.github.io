@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link href='http://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        
+        <div role="main">
+          <!--Used for game play-->
+		  <div id="container"></div>
+		  <!--Used for level-up, stage-up, game-over, high-score, and start game-->
+		  <div class="loading_container;"></div>
+	  	</div>
+
+
+        <script src="http:/ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="http:////cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+    	<script src="js/vendor/kinetic.min.js"></script>
+    	<script src="js/vendor/moment.min.js"></script>
+    	<script src="js/vendor/handlebars.js"></script>
+    	<script src="js/vendor/buzz.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.0.min.js"><\/script>')</script>
+        <script src="js/game4.js"></script>
+        <script id="game_over" type="text/x-handlebars-template">
+	        <h3>{{heading}}</h3>
+	        <ul>
+	        	<li>Your journey ends at level {{level}}, stage {{stage}}.</li>
+	        	<li>You scored {{score}} points on your journey.</li>
+	        	<li class="input">Please submit your initials for the records!</li>
+	        	<li class="input_text"><input class="high_score" type="text" /></li>
+	        	<li><input type="button" class="button" value="Submit" onclick='game_indicators.write_score()'}/></li>
+	        	
+	        </ul>
+  		</script>
+  		<script id="stage_up" type="text/x-handlebars-template">
+	        <h3>{{heading}}</h3>
+	        <ul>
+	        	<li>Phew! You made it!</li>
+	        	<li>You get {{bonus}} bonus points!</li>
+
+	        	<li style="padding-top: 25px;"><input type="button" class="button" value="Onward!" onclick='note_setup.next_stage()'/></li>
+	        </ul>
+  		</script>
+  		<script id="high_scores" type="text/x-handlebars-template">
+	        <h3>High Scores</h3>
+	        <ul>
+			  <li>{{highScore1.name}} - {{highScore1.score}}</li>
+			  <li>{{highScore2.name}} - {{highScore2.score}}</li>
+			  <li>{{highScore3.name}} - {{highScore3.score}}</li>
+			  <li>{{highScore4.name}} - {{highScore4.score}}</li>
+			  <li style='padding-bottom: 25px;'>{{highScore5.name}} - {{highScore5.score}}</li>
+			  <li><input type="button" class="button" value="Back" onclick='game_indicators.draw_popup("game_start",null);
+'/></li>
+	        </ul>
+	    </script>  
+  		<script id="level_up" type="text/x-handlebars-template">
+	        <h3>{{heading}}</h3>
+	        <ul>
+	        	<li>You get {{bonus}} bonus points</li>
+	        	<li>for making it with </li>
+	        	<li>{{seconds}} seconds to spare!</li>
+	        	<li class="input">Please submit your initials for the records!</li>
+	        	<li class="input_text"><input class="high_score" type="text" /></li>
+	        	<li><input type="button" class="button" value="Submit" onclick='game_indicators.write_score()'}/></li>
+	        </ul>
+  		</script>
+  		<script id="game_start" type="text/x-handlebars-template">
+  		<h1>Monkey Music!</h1>
+  			<ul id="choices" style="margin-top: 75px;">
+				<li style="padding-bottom: 25px;">
+					<button class="button" onclick="game_board_setup.initialize_stage()">Start</button>
+				</li>
+				<li>
+					<button class="button" onclick="game_indicators.calculate_high_scores()">High Scores</button>
+				</li>
+			</ul>
+  		</script>
+  		<div class="time" style="z-index: 1000; font-size: 80px;"></div>
+    </body>
+</html>
