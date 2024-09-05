@@ -38,20 +38,29 @@ body {
 }
 
 header .name {
-  padding-inline: 48px;
+  padding-inline: 22%;
+  padding-block-start: 1rem;
   font-family: "Raleway", sans-serif;
-  font-size: 3rem;
+  font-size: 1rem;
   font-weight: 900;
   color: var(--primary);
-  background: var(--secondary);
+  @media only screen and (max-width: 720px) {
+    height: 75px;
+    line-height: 84px;
+    font-size: 3em;
+    background: var(--secondary);
+    text-align: center;
+    line-break: none;
+  }
 }
 
 main {
   margin-block-start: 16px;
   margin-block-end: 32px;
-  padding-inline: 48px;
+  padding-inline: 25%;
   @media screen and (max-width: 720px) {
     text-align: justify;
+    padding-inline: 2rem;
   }
 }
 
@@ -77,7 +86,7 @@ footer.page-footer {
 }
 .x-light {
   color: var(--white);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 a {
