@@ -1,0 +1,46 @@
+{
+  "name": "book-diary",
+  "version": "1.0.3",
+  "private": true,
+  "homepage": "/book-diary",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@vitejs/plugin-react": "^4.2.1",
+    "better-sqlite3": "^11.7.2",
+    "bootstrap": "^5.3.3",
+    "classnames": "^2.5.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "uuid": "^10.0.0",
+    "vite-tsconfig-paths": "^4.3.2",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest --mode test",
+    "test:watch": "vitest --watch --mode test",
+    "test:coverage": "vitest --coverage --mode test"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/node": "^20.11.27",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
+    "@types/uuid": "^10.0.0",
+    "jsdom": "^23.0.1",
+    "mini-css-extract-plugin": "2.4.5",
+    "sass": "^1.48.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.6",
+    "vitest": "^1.4.0"
+  }
+}
